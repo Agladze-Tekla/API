@@ -10,7 +10,7 @@ import UIKit
 final class ViewController: UIViewController {
 
     //MARK: - Properties
-    private let movieList = MovieInfo.movieList
+    private var movieList = MovieInfo.movieList
     
     private let profileBarButton: UIBarButtonItem = {
         let button = UIButton()
@@ -51,11 +51,13 @@ final class ViewController: UIViewController {
         return collectionView
     }()
     
+    private var movies = [Movie]()
     
     //MARK: - ViewLifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-     setupView()
+        setupView()
+        fetchMovies()
     }
 
     //MARK: - Private Methods
@@ -110,8 +112,23 @@ final class ViewController: UIViewController {
             movieCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    
+    private func fetchMovies() {
+        NetworkManager.shared.fetchMovies { [weak self] result in
+            switch result {
+            case .success(let movies):
+                self?.movies = movies //It doesn't even come here, not sure if the url is written correctly or the jason decoder.
+                DispatchQueue.main.async {
+                    self?.movieCollectionView.reloadData()
+                }
+            case .failure(_):
+                break
+            }
+        }
+    }
+ 
 }
-//MARK: CollectionView DataSource
+//MARK: - CollectionView DataSource
     extension ViewController: UICollectionViewDataSource {
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
            movieList.count
@@ -130,7 +147,7 @@ final class ViewController: UIViewController {
 extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movieDetailVC = MovieDetailViewController()
-        movieDetailVC.configure(movies: movieList[indexPath.row])
+        //movieDetailVC.configure(movies: movieList[indexPath.row])
         navigationController?.pushViewController(movieDetailVC, animated: true)
     }
 }
