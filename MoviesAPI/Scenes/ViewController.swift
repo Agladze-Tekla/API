@@ -10,8 +10,6 @@ import UIKit
 final class ViewController: UIViewController {
 
     //MARK: - Properties
-    //private var movieList = MovieInfo.movieList
-    
     private let profileBarButton: UIBarButtonItem = {
         let button = UIButton()
         button.setTitle("Profile", for: .normal)
@@ -53,11 +51,14 @@ final class ViewController: UIViewController {
     
     private var movies = [MovieInfo]()
     
+    private var viewModel = MovieViewModel()
+    
     //MARK: - ViewLifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        fetchMovies()
+        setupViewModelDelegate()
+        viewModel.viewDidLoad()
     }
 
     //MARK: - Private Methods
@@ -113,18 +114,8 @@ final class ViewController: UIViewController {
         ])
     }
     
-    private func fetchMovies() {
-               NetworkManager.shared.fetchMovies { [weak self] result in
-                   switch result {
-                   case .success(let movies):
-                       self?.movies = movies
-                       DispatchQueue.main.async {
-                           self?.movieCollectionView.reloadData()
-                       }
-                   case .failure(_):
-                       break
-                   }
-               }
+    private func setupViewModelDelegate() {
+        viewModel.delegate = self
     }
 }
 //MARK: - CollectionView DataSource
@@ -166,4 +157,17 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         
         return CGSize(width: width, height: height)
     }
+}
+
+// MARK: - MovieViewModel Delegate
+extension ViewController: MovieViewModelDelegate {
+    func movieFetched(_ movies: [MovieInfo]) {
+        self.movies = movies
+    }
+    
+    func showeError(_ error: Error) {
+        print("Error")
+    }
+    
+    
 }

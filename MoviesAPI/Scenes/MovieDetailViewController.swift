@@ -64,7 +64,7 @@ final class MovieDetailViewController: UIViewController {
          return button
      }()
      
-     private var movieList: MovieInfo?
+    private var movies = [MovieInfo]()
      
      // MARK: - ViewLifecycle
      override func viewDidLoad() {
@@ -80,7 +80,7 @@ final class MovieDetailViewController: UIViewController {
          setupDescriptionLabel()
          setupBottomSectionStackView()
          setupSelectSessionButton()
-         setupMovieWithInformation()
+        setupMovieWithInformation()
      }
     
     private func setupBackground() {
@@ -124,11 +124,9 @@ final class MovieDetailViewController: UIViewController {
          
     private func setupMovieWithInformation() {
         // TODO: - Fix after network call
-        /*
-        navigationItem.title = movieList?.title
-        descriptionLabel.text = movieList?.synopsis
-        createInfoStackView("Genre", detail: movieList?.genre ?? "")
-   */
+        
+      //  navigationItem.title = movies.originalTitle
+       // descriptionLabel.text = movies.overView
     }
     
     //Didn't have this in the original code (Made every stack, label and movieInfo separately and frankly it looked like a mess) so I kinda used the resourceHub code, sorry, looked at it and couldn't think of another solution :\
@@ -172,6 +170,6 @@ final class MovieDetailViewController: UIViewController {
     
      // MARK: - Configure
      func configure(movies: MovieInfo) {
-         self.movieList = movies
+       //  self.movies = movies
      }
 }

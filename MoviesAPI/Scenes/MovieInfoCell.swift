@@ -10,7 +10,6 @@ import UIKit
 final class MovieInfoCell: UICollectionViewCell {
  
     static let identifier = "MovieCollectionCell"
-  //  private let movieList = MovieInfo//.movieList
     
     //MARK: - Properties
     private let cellStackView: UIStackView = {
@@ -65,7 +64,6 @@ final class MovieInfoCell: UICollectionViewCell {
     }
     
     func configurate(movies: MovieInfo) {
-        // TODO: - Fix it after network call
         titleLabel.text = movies.title
         setImage(url: movies.posterPath)
     }
