@@ -10,7 +10,7 @@ import UIKit
 final class MovieInfoCell: UICollectionViewCell {
  
     static let identifier = "MovieCollectionCell"
-    private let movieList = MovieInfo.movieList
+  //  private let movieList = MovieInfo//.movieList
     
     //MARK: - Properties
     private let cellStackView: UIStackView = {
@@ -32,6 +32,8 @@ final class MovieInfoCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 16)
+        label.numberOfLines = 2
+        label.textAlignment = .center
         label.textColor = .white
         return label
     }()
@@ -62,10 +64,18 @@ final class MovieInfoCell: UICollectionViewCell {
         cellStackView.addArrangedSubview(genreLabel)
     }
     
-    func configurate(movieList: MovieInfo) {
-        poster.image = movieList.image
-        titleLabel.text = movieList.title
-        genreLabel.text = movieList.genre
+    func configurate(movies: MovieInfo) {
+        // TODO: - Fix it after network call
+        titleLabel.text = movies.title
+        setImage(url: movies.posterPath)
+    }
+    
+    private func setImage(url: String) {
+        NetworkManager.shared.downloadImage(from: url) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.poster.image = image
+            }
+        }
     }
     
     private func setUpConstraints() {

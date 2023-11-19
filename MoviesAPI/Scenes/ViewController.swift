@@ -10,7 +10,7 @@ import UIKit
 final class ViewController: UIViewController {
 
     //MARK: - Properties
-    private var movieList = MovieInfo.movieList
+    //private var movieList = MovieInfo.movieList
     
     private let profileBarButton: UIBarButtonItem = {
         let button = UIButton()
@@ -51,7 +51,7 @@ final class ViewController: UIViewController {
         return collectionView
     }()
     
-    private var movies = [Movie]()
+    private var movies = [MovieInfo]()
     
     //MARK: - ViewLifeCycle
     override func viewDidLoad() {
@@ -114,31 +114,30 @@ final class ViewController: UIViewController {
     }
     
     private func fetchMovies() {
-        NetworkManager.shared.fetchMovies { [weak self] result in
-            switch result {
-            case .success(let movies):
-                self?.movies = movies //It doesn't even come here, not sure if the url is written correctly or the jason decoder.
-                DispatchQueue.main.async {
-                    self?.movieCollectionView.reloadData()
-                }
-            case .failure(_):
-                break
-            }
-        }
+               NetworkManager.shared.fetchMovies { [weak self] result in
+                   switch result {
+                   case .success(let movies):
+                       self?.movies = movies
+                       DispatchQueue.main.async {
+                           self?.movieCollectionView.reloadData()
+                       }
+                   case .failure(_):
+                       break
+                   }
+               }
     }
- 
 }
 //MARK: - CollectionView DataSource
     extension ViewController: UICollectionViewDataSource {
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-           movieList.count
+            movies.count
        }
     
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionCell", for: indexPath) as? MovieInfoCell else {
                 return UICollectionViewCell()
             }
-            cell.configurate(movieList: movieList[indexPath.row])
+            cell.configurate(movies: movies[indexPath.row])
            return cell
        }
     }
@@ -147,7 +146,7 @@ final class ViewController: UIViewController {
 extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movieDetailVC = MovieDetailViewController()
-        //movieDetailVC.configure(movies: movieList[indexPath.row])
+       movieDetailVC.configure(movies: movies[indexPath.row])
         navigationController?.pushViewController(movieDetailVC, animated: true)
     }
 }

@@ -123,15 +123,12 @@ final class MovieDetailViewController: UIViewController {
      }
          
     private func setupMovieWithInformation() {
+        // TODO: - Fix after network call
+        /*
         navigationItem.title = movieList?.title
-        movieImageView.image = movieList?.image
-        ratingLabel.text = String(movieList?.rating ?? 0)
         descriptionLabel.text = movieList?.synopsis
-        createInfoStackView("Runtime", detail: movieList?.runtime ?? "")
-        createInfoStackView("Release", detail: movieList?.release ?? "")
         createInfoStackView("Genre", detail: movieList?.genre ?? "")
-        createInfoStackView("Director", detail: movieList?.director ?? "")
-        createInfoStackView("Cast", detail: movieList?.cast ?? "")
+   */
     }
     
     //Didn't have this in the original code (Made every stack, label and movieInfo separately and frankly it looked like a mess) so I kinda used the resourceHub code, sorry, looked at it and couldn't think of another solution :\
